@@ -1,38 +1,38 @@
 module.exports = function makeInsertCompany({
     insertCompanyDb,
     validationError,
+    forbiddenError,
     checkCompanyByName,
     Joi,
 })
 {
-    return async function insertCompany({ cname, email, address, estyear, type })
+    return async function insertCompany({ name, email, address, estYear, type })
     {
-        const {error} = validateInsertCompany({ cname, email, address, estyear, type })
-
-        if(error)
-            throw new validationError(error.message);
+        validateInput({ name, email, address, estYear, type })    
 
         // Check if company with provided name exist or not
-        let companyListLength = await checkCompanyByName({ cname })
+        let companyListLength = await checkCompanyByName({ name })
         if(!companyListLength)
         {
-            let companyid = await insertCompanyDb({ cname, email, address, estyear, type });
+            let companyid = await insertCompanyDb({ name, email, address, estYear, type });
             return companyid;
         }
         else {
-            throw new Error(`company with name ${cname} already exist!`);
+            throw new forbiddenError(`company with name ${name} already exist!`);
         }
     }
 
-    function validateInsertCompany({ cname, email, address, estyear, type })
+    function validateInput({ name, email, address, estYear, type })
     {
         const schema = Joi.object({
-            cname: Joi.string().min(1).max(15).required(),
+            name: Joi.string().min(1).max(15).required(),
             email: Joi.string().required(),
             address: Joi.string().min(1).max(50).required(),
-            estyear: Joi.string().min(4).max(4).required(),
-            type: Joi.string(),
+            estYear: Joi.string().min(4).max(4).required(),
+            type: Joi.string().required(),
         })
-        return schema.validate({ cname, email, address, estyear, type })
+        const {error} = schema.validate({ name, email, address, estYear, type })
+        if(error)
+            throw new validationError(error.message);
     }
 }

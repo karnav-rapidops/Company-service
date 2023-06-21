@@ -31,10 +31,10 @@ async function runConsumer()
             const data = JSON.parse(message.value);
 
             // Get company email
-            const companyEmail = await companyDbMethods.cockroach.companyDbMethods.getCompanyEmailByCompanyName({ cname: data.cname })
+            const companyEmail = await companyDbMethods.cockroach.companyDbMethods.getCompanyEmailByCompanyName({ name: data.companyName })
 
             // Company-email 
-            await email.sendEmail({ cname: data.cname, email: companyEmail, empname: data.empname });
+            await email.sendEmail({ companyName: data.companyName, email: companyEmail, employeeName: data.name });
     }
 })
 }

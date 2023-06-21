@@ -7,22 +7,16 @@ module.exports = function makeGetCompanyIdByNameAction({
     {    
         try 
         {
-            let cname = req.params.cname;
-
-            const {error} = validateCompanyIdByNameAction({ cname })
+            let name = req.params.name;
+                        
+            const { error } = validateCompanyIdByNameAction({ name })
 
             if(error)
                 return res.status(400).send({"validation error": error.details[0].message})
-                
-
-            console.info('\nGET-COMPANY-ID-BY-NAME-CONTROLLER');
-            console.info("company name: ", cname);
-
-            let companyid = await getCompanyIdByName({ cname });
             
-            // console.info('GET-COMPANY-BY-ID-CONTROLLER-RESULT: ', companyDetails);
-
-            res.status(200).send(companyid);  
+            let companyId = await getCompanyIdByName({ name });
+            
+            res.status(200).send(companyId);  
         }   
         catch(err)
         {
@@ -30,11 +24,11 @@ module.exports = function makeGetCompanyIdByNameAction({
             res.send(err.message);
         } 
     }
-    function validateCompanyIdByNameAction({ cname })
+    function validateCompanyIdByNameAction({ name })
     {
         const schema = Joi.object({
-            cname: Joi.string().min(1).max(20).required(),
+            name: Joi.string().min(1).max(20).required(),
         })
-        return schema.validate({ cname })
+        return schema.validate({ name })
     }
 }

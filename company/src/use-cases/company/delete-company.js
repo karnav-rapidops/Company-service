@@ -1,34 +1,26 @@
 module.exports = function makeDeleteCompany({
+    deleteEmployeeByCompanyId,
     deleteCompanyDb,
     validationError,
-    axios,
     Joi,
 })
 {
-    return async function deleteCompany({ cid })
+    return async function deleteCompany({ id })
     {
-        console.info("\nDELETE-COMPANY-USECASE");
-        console.info("company id: ", cid);
+        validateInput({ id })
 
-        const {error} = validateDeleteCompany({ cid });
-        if(error)
-            throw new validationError(error.message);
-
-        let companyid = await deleteCompanyDb({ cid });
-
-        console.info("DELETE-COMPANY-USECASE-RESULT: ", companyid);
+        await deleteEmployeeByCompanyId({ id })
         
-        await axios.delete(`http://localhost:3001/employee/company/${cid}`);
-            
-        // console.info("Axios result: ", axiosRes.data);
-
-        return companyid;
+        return await deleteCompanyDb({ id });
     }
-    function validateDeleteCompany({ cid })
+    function validateInput({ id })
     {
         const schema = Joi.object({
-           cid: Joi.string().required(),
+           id: Joi.string().required(),
         })
-        return schema.validate({ cid })
+
+        const { error } = schema.validate({ id });
+        if(error)
+            throw new validationError(error.message);
     }
 }

@@ -9,12 +9,15 @@
   "author": "karnav",
   "license": "ISC",
   "dependencies": {
+    "@cucumber/cucumber": "^9.1.2",
     "axios": "^1.4.0",
+    "chai": "^4.3.7",
     "express": "^4.18.2",
     "joi": "^17.9.2",
     "kafkajs": "^2.2.4",
     "nodemailer": "^6.9.3",
-    "pg": "^8.11.0"
+    "pg": "^8.11.0",
+    "sinon": "^15.1.2"
   },
   "devDependencies": {
     "sequelize": "^6.31.1",

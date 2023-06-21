@@ -6,12 +6,8 @@ module.exports = function makeGetAllCompanyAction({
     {      
         try
         {
-            // console.info('\nGET-ALL-COMPANY-CONTROLLER');
-
             let companyList = await getAllCompany();
             
-            // console.info('GET-ALL-COMPANY-CONTROLLER-RESULT: ', companyList);
-
             res.status(200).send(companyList); 
         }  
         catch(err)

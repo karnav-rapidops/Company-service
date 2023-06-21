@@ -1,7 +1,7 @@
 module.exports = function makeSendEmail({
     nodemailer,
 }){
-    return async function sendEmail({ cname, email, empname })
+    return async function sendEmail({ companyName, email, employeeName })
     {
         let transporter = nodemailer.createTransport({
             service: "gmail",
@@ -17,7 +17,7 @@ module.exports = function makeSendEmail({
             from: 'karnavgamit@gmail.com', 
             to: email, 
             subject: "Employee Registered!", // Subject line
-            text: `Hello ${cname}!\n${empname} has been registered at your company!`, 
+            text: `Hello ${companyName}!\n${employeeName} has been registered at your company!`, 
           });
         
           console.log(`Email sent to email: ${email}`);

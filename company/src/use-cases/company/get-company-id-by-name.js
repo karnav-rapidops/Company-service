@@ -4,28 +4,26 @@ module.exports = function makeGetCompanyIdByName({
     Joi,
 })
 {
-    return async function getCompanyIdByName({ cname })
+    return async function getCompanyIdByName({ name })
     {
-        console.info("\nGET-COMPANY-ID-BY-NAME-USECASE");
-        console.info("company name: ", cname);
-
-        const {error} = validateGetCompanyIdByName({ cname })
-        if(error)
-            throw new validationError(error.message);
-
+        validateInput({ name })
+            
         // Check if company with this name exist or not 
-
-        let companyid = await getCompanyIdByNameDb({ cname });
-
-        console.info("GET-COMPANY-ID-BY-NAME-USECASE-RESULT: ", companyid);
-        return companyid;
+         
+        return await getCompanyIdByNameDb({ name });
     }
 
-    function validateGetCompanyIdByName({ cname })
+    function validateInput({ name })
     {
         const schema = Joi.object({
-            cname: Joi.string().min(1).max(15).required(),
+            name: Joi.string().min(1).max(15).required(),
         })
-        return schema.validate({ cname })
+
+        const { error } = schema.validate({ name })
+        
+        if(error)
+        {
+            throw new validationError(error.message);
+        } 
     }
 }

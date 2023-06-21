@@ -4,27 +4,20 @@ module.exports = function makeGetCompanybyId({
     Joi,
 })
 {
-    return async function getCompnayById({ cid })
+    return async function getCompnayById({ id })
     {
-        // console.info("\nGET-COMPANY-BY-ID-USECASE");
-        // console.info("company id: ", cid);
+        validateInput({ id })
 
-        const {error} = validateGetCompanyById({ cid })
-        if(error)
-            throw new validationError(error.message);
-
-
-        let companyDetails = await getCompanyByIdDb({ cid });
-
-        console.info("GET-COMPANY-BY-ID-USECASE-RESULT: ", companyDetails);
-        return companyDetails;
+        return await getCompanyByIdDb({ id });
     }
 
-    function validateGetCompanyById({ cid })
+    function validateInput({ id })
     {
         const schema = Joi.object({
-            cid: Joi.string().required(),
+            id: Joi.string().required(),
         })
-        return schema.validate({ cid })
+        const {error} = schema.validate({ id })
+        if(error)
+            throw new validationError(error.message);
     }
 }

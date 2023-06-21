@@ -7,19 +7,14 @@ module.exports = function makeGetCompanyByIdAction({
     {    
         try 
         {
-            let cid = req.params.id;
+            let id = req.params.id;
 
-            const {error} = validateGetCompanyByIdAction({ cid })
+            const {error} = validateGetCompanyByIdAction({ id })
             if(error)
                 return res.status(400).send({"validation error": error.details[0].message})
-                
-            // console.info('\nGET-COMPANY-BY-ID-CONTROLLER');
-            // console.info("company id: ", cid);
 
-            let companyDetails = await getCompanyById({ cid });
+            let companyDetails = await getCompanyById({ id });
             
-            // console.info('GET-COMPANY-BY-ID-CONTROLLER-RESULT: ', companyDetails);
-
             res.status(200).send(companyDetails);  
         }   
         catch(err)
@@ -28,11 +23,11 @@ module.exports = function makeGetCompanyByIdAction({
             res.send(err.message);
         } 
     }
-    function validateGetCompanyByIdAction({ cid })
+    function validateGetCompanyByIdAction({ id })
     {
         const schema = Joi.object({
-            cid: Joi.string().required(),
+            id: Joi.string().required(),
         })
-        return schema.validate({ cid })
+        return schema.validate({ id })
     }
 }

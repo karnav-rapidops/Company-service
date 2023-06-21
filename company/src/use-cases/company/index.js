@@ -8,11 +8,12 @@ const dbMethods = require('../../data-access');
 // Import use-cases make functions 
 const makeCheckCompanyByName = require('./check-company-by-name');
 const makeInsertCompany = require('./insert-company');
-const makeUpdtaeCompanyName = require('./update-company-name');
 const makeDeleteCompany = require('./delete-company');
 const makeGetCompanybyId = require('./get-company-by-id');
 const makeGetAllCompany = require('./get-all-company');
 const makeGetCompanyIdByName = require('./get-company-id-by-name');
+const makeUpdateCompany = require('./update-company');
+const { deleteEmployeeByCompanyId } = require('../../internal-service-call/employee');
 
 // Call to maker functions and injecting db methods 
 
@@ -25,13 +26,6 @@ const checkCompanyByName = makeCheckCompanyByName({
 const insertCompany = makeInsertCompany({
     insertCompanyDb: dbMethods.cockroach.companyDbMethods.insertCompany,
     validationError: exceptions.validationError,
-    checkCompanyByName,
-    Joi,
-});
-
-const updateCompanyName = makeUpdtaeCompanyName({
-    updateCompanyNameDb: dbMethods.cockroach.companyDbMethods.updateCompanyName,
-    validationError: exceptions.validationError,
     forbiddenError: exceptions.forbiddenError,
     checkCompanyByName,
     Joi,
@@ -40,6 +34,7 @@ const updateCompanyName = makeUpdtaeCompanyName({
 const deleteCompany = makeDeleteCompany({
     deleteCompanyDb: dbMethods.cockroach.companyDbMethods.deleteCompany,
     validationError: exceptions.validationError,
+    deleteEmployeeByCompanyId,
     axios,
     Joi,
 })
@@ -62,11 +57,17 @@ const getCompanyIdByName = makeGetCompanyIdByName({
     Joi,
 })
 
+const updateCompany = makeUpdateCompany({
+    updateCompanyDb: dbMethods.cockroach.companyDbMethods.updateCompany,
+    updateCompanyFieldDb: dbMethods.cockroach.companyDbMethods.updateCompanyField,
+    Joi,
+})
+
 module.exports = Object.freeze({
     insertCompany,
-    updateCompanyName,
     deleteCompany,
     getCompanyById,
     getAllCompany,
     getCompanyIdByName,
+    updateCompany,
 })

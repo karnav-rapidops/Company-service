@@ -7,33 +7,28 @@ module.exports = function makeDeleteCompanyAction({
     {        
         try
         {
-            let cid = req.params.id;
+            let id = req.params.id;
         
-            console.info('\nDELETE-COMPANY-CONTROLLER');
-            console.info("company id: ", cid);
-
-            const { error } = validateDeleteCompanyAction({ cid })
+            const { error } = validateDeleteCompanyAction({ id })
 
             if(error)
                 return res.status(400).send({"validation error": error.details[0].message})
 
-            let deletedCompanyId = await deleteCompany({ cid });
-            // 
-            // console.info('DELETE-COMPANY-CONTROLLER-RESULT: ', deletedCompanyId);
+            let deletedCompanyId = await deleteCompany({ id });
 
             res.status(200).send(deletedCompanyId);  
         }
         catch(err)
         {
-            // console.error(err);
+            console.error(err);
             res.send(err.message);
         }
     }
-    function validateDeleteCompanyAction({ cid })
+    function validateDeleteCompanyAction({ id })
     {
         const schema = Joi.object({
-            cid: Joi.string().required(),
+            id: Joi.string().required(),
         })
-        return schema.validate({ cid })
+        return schema.validate({ id })
     }
 }

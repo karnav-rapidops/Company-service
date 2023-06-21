@@ -4,25 +4,19 @@ module.exports = function makecheckCompanyByName({
     Joi,
 })
 {
-    return async function checkCompanyByName({ cname })
+    return async function checkCompanyByName({ name })
     {
-        // console.info("\nCHECK-COMPANY-BY-NAME-USECASE");
-        // console.info("company name: ", cname);
+        validateInput({ name })
 
-        const {error} = validateCheckCompanyByName({ cname })
-        if(error)
-            throw new validationError(error.message);
-
-        let companyListLength = await getCompanyByNameDb({ cname });
-
-        // console.info("CHECK-COMPANY-BY-NAME-USECASE-RESULT: ", companyListLength);
-        return companyListLength;
+        return await getCompanyByNameDb({ name });
     }
-    function validateCheckCompanyByName({ cname })
+    function validateInput({ name })
     {
         const schema = Joi.object({
-            cname: Joi.string().min(1).max(15).required(),
+            name: Joi.string().min(1).max(15).required(),
         })
-        return schema.validate({ cname })
+        const {error} = schema.validate({ name })
+        if(error)
+            throw new validationError(error.message);   
     }
 }
