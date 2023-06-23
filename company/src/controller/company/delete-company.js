@@ -9,11 +9,6 @@ module.exports = function makeDeleteCompanyAction({
         {
             let id = req.params.id;
         
-            const { error } = validateDeleteCompanyAction({ id })
-
-            if(error)
-                return res.status(400).send({"validation error": error.details[0].message})
-
             let deletedCompanyId = await deleteCompany({ id });
 
             res.status(200).send(deletedCompanyId);  
@@ -21,14 +16,7 @@ module.exports = function makeDeleteCompanyAction({
         catch(err)
         {
             console.error(err);
-            res.send(err.message);
+            res.status(500).send(err.message);
         }
-    }
-    function validateDeleteCompanyAction({ id })
-    {
-        const schema = Joi.object({
-            id: Joi.string().required(),
-        })
-        return schema.validate({ id })
     }
 }

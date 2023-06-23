@@ -13,7 +13,7 @@ module.exports = function makeGetAllCompanyAction({
         catch(err)
         {
             console.error(err);
-            res.send(err.message);
+            res.status(500).send(err.message);
         }
     }
 }

@@ -7,11 +7,12 @@ module.exports = function makeInsertCompany({
 })
 {
     return async function insertCompany({ name, email, address, estYear, type })
-    {
+    {        
         validateInput({ name, email, address, estYear, type })    
 
         // Check if company with provided name exist or not
         let companyListLength = await checkCompanyByName({ name })
+
         if(!companyListLength)
         {
             let companyid = await insertCompanyDb({ name, email, address, estYear, type });

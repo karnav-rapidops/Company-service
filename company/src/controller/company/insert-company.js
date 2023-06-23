@@ -13,10 +13,7 @@ module.exports = function makeInsertCompanyAction({
             let estYear = req.body.estYear;
             let type = req.body.type;
 
-            const { error } = validateInsertCompanyAction({ name, address, estYear, type })
-
-            if(error)
-                return res.status(400).send({"validation error": error.details[0].message})
+            validateInput({ name, address, estYear, type, res })
                 
             let companyId = await insertCompany({ name, email, address, estYear, type });
 
@@ -27,7 +24,7 @@ module.exports = function makeInsertCompanyAction({
             res.send(err.message);
         }   
     }
-    function validateInsertCompanyAction({ name, address, estYear, type })
+    function validateInput({ name, address, estYear, type, res })
     {
         const schema = Joi.object({ 
             name: Joi.string().min(1).max(15).required(),
@@ -35,6 +32,9 @@ module.exports = function makeInsertCompanyAction({
             estYear: Joi.string().min(4).max(4).required(),
             type: Joi.string(),
         })
-        return schema.validate({ name, address, estYear, type })
+        const { error } = schema.validate({ name, address, estYear, type })
+
+        if(error)
+            return res.status(400).send({"validation error": error.details[0].message})
     }
 }

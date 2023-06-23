@@ -6,6 +6,7 @@ module.exports = function makecheckCompanyByName({
 {
     return async function checkCompanyByName({ name })
     {
+        console.log("Check-company-by-name-usecase", name)
         validateInput({ name })
 
         return await getCompanyByNameDb({ name });

@@ -8,11 +8,6 @@ module.exports = function makeGetCompanyIdByNameAction({
         try 
         {
             let name = req.params.name;
-                        
-            const { error } = validateCompanyIdByNameAction({ name })
-
-            if(error)
-                return res.status(400).send({"validation error": error.details[0].message})
             
             let companyId = await getCompanyIdByName({ name });
             
@@ -21,14 +16,7 @@ module.exports = function makeGetCompanyIdByNameAction({
         catch(err)
         {
             console.error(err);
-            res.send(err.message);
+            res.status(500).send(err.message);
         } 
-    }
-    function validateCompanyIdByNameAction({ name })
-    {
-        const schema = Joi.object({
-            name: Joi.string().min(1).max(20).required(),
-        })
-        return schema.validate({ name })
     }
 }

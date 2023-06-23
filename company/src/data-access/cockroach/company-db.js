@@ -64,7 +64,10 @@ module.exports = function makeCompanyDbMethods({
     async function getCompanyByName({ name })
     {
         try {
+            console.log("\nGET-COMPANY-BY-NAME-DB-FUNCTION:", name);
             const result = await pool.query(`SELECT cname FROM ${companyTable} WHERE cname = $1`, [name]);
+
+            console.log(result.rows.length);
 
             return result.rows.length;
         } catch (error) {
@@ -76,8 +79,9 @@ module.exports = function makeCompanyDbMethods({
     {
         try {
             const result = await pool.query(`SELECT cid FROM company WHERE cname = $1`, [name]);
-
-        return result.rows[0].cid;
+           
+            return result.rows[0]?.cid;
+            
         } catch (error) {
             throw new databaseError('Error while quering!')   
         }
@@ -87,7 +91,7 @@ module.exports = function makeCompanyDbMethods({
     {
         try {
             const result = await pool.query(`SELECT email FROM ${companyTable} WHERE cname = $1`, [name]);
-            return result.rows[0].email;
+            return result.rows[0]?.email;
         } catch (error) {
             throw new databaseError('Error while quering!')
         }
@@ -98,7 +102,7 @@ module.exports = function makeCompanyDbMethods({
         try {
             const result = await pool.query(`UPSERT INTO ${companyTable} (cid, cname, email, address, estyear, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING cid`, [id, name, email, address, estYear, type]);
         
-            return result.rows[0].cid;
+            return result.rows[0]?.cid;
         } catch (error) {
             throw new databaseError('Error while quering!')   
         }
@@ -108,7 +112,7 @@ module.exports = function makeCompanyDbMethods({
     {
         try {
             const result = await pool.query(`UPDATE ${companyTable} SET ${fieldToUpdate} = $1 WHERE cid = $2 RETURNING cid`, [newValue, id]);
-        return result.rows[0].cid; 
+        return result.rows[0]?.cid; 
         } catch (error) {
             throw new databaseError('Error while quering!')
         }
